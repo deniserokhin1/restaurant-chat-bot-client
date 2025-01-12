@@ -27,6 +27,10 @@ defineProps({
     },
 })
 
+const emit = defineEmits<{
+    (e: 'add-user-query'): void
+}>()
+
 const inputValue = ref('')
 const isLoading = ref(false)
 
@@ -40,8 +44,11 @@ const requestHandler = async () => {
     chatFeedStore.addUserQuery(query)
     isLoading.value = true
     const startTime = Date.now()
-    await chatFeedStore.getLlmAnswer(query)
-    isLoading.value = false
+    emit('add-user-query')
+    await chatFeedStore
+        .getLlmAnswer(query)
+        .catch((e) => console.log('Ошибка при получении ответа от LLM:', e))
+        .finally(() => (isLoading.value = false))
     const endTime = Date.now()
     const responseTime = endTime - startTime
     console.log('Время ответа от сервера:', responseTime, 'мс')

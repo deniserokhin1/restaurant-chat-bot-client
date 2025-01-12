@@ -1,39 +1,23 @@
 <template>
     <div class="main">
-        <Stack
-            class="wrapper"
-            direction="column"
-            justify="between"
-            :gap="16"
-        >
-            <div class="ai-answer" v-for="item in feed">
+        <div class="wrapper" ref="scrollContainer">
+            <div class="chat-feed" v-for="item in feed">
                 <TextBlock
                     v-if="item.type === MessageSide.USER"
                     :side="'user'"
                     :text="
-                        item.text.charAt(0).toUpperCase() +
-                        item.text.slice(1)
+                        item.text.charAt(0).toUpperCase() + item.text.slice(1)
                     "
                 />
-                <Loader
-                    v-if="
-                        item.type === ChatFeedItemsEnum.LOADING
-                    "
-                />
+                <Loader v-if="item.type === ChatFeedItemsEnum.LOADING" />
                 <div
                     v-if="
-                        item.type === DishType.ACTIVE &&
-                        item.dishes.length > 0
+                        item.type === DishType.ACTIVE && item.dishes.length > 0
                     "
                     class="goods-container"
                 >
                     <ProductCard
-                        v-for="{
-                            id,
-                            title,
-                            price,
-                            url,
-                        } in item.dishes"
+                        v-for="{ id, title, price, url } in item.dishes"
                         :key="id"
                         :title="title"
                         :price="price"
@@ -47,14 +31,14 @@
                     <div v-html="item.text" />
                 </CardBg>
             </div>
-        </Stack>
-        <LLMRequest />
+        </div>
+        <LLMRequest @addUserQuery="scrollToBottom" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { TextBlock, Stack, Loader, TextAlign, CardBg } from '@/shared'
+import { TextBlock, Loader, TextAlign, CardBg } from '@/shared'
 import {
     ChatFeedItemsEnum,
     DishType,
@@ -63,9 +47,24 @@ import {
     ProductCard,
 } from '@/entities'
 import { LLMRequest } from '@/features'
+import { onBeforeUnmount, ref } from 'vue'
+
+const scrollContainer = ref<HTMLDivElement>()
+const timerId = ref()
 
 const chatFeedStore = useChatFeedStore()
 const { feed } = storeToRefs(chatFeedStore)
+
+function scrollToBottom() {
+    if (!scrollContainer.value) return
+    timerId.value = setTimeout(() => {
+        if (scrollContainer.value) {
+            scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
+        }
+    }, 100)
+}
+
+onBeforeUnmount(() => clearTimeout(timerId.value))
 </script>
 
 <style scoped>
@@ -74,7 +73,7 @@ const { feed } = storeToRefs(chatFeedStore)
     height: 100vh;
 }
 
-.ai-answer {
+.chat-feed {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -93,11 +92,16 @@ const { feed } = storeToRefs(chatFeedStore)
 }
 
 .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 16px;
     padding: 16px;
     min-height: 15vh;
     max-height: 80vh;
     display: flex;
-    overflow: scroll;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .goods-container {
