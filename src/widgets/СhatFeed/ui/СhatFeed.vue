@@ -11,9 +11,7 @@
                 />
                 <Loader v-if="item.type === ChatFeedItemsEnum.LOADING" />
                 <div
-                    v-if="
-                        item.type === DishType.ACTIVE && item.dishes.length > 0
-                    "
+                    v-if="item.type === DishType.ACTIVE && !!item.dishes.length"
                     class="goods-container"
                 >
                     <ProductCard
