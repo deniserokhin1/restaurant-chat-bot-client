@@ -39,7 +39,7 @@ const isLoading = ref(false)
 
 const chatFeedStore = useChatFeedStore()
 //@ts-ignore
-const tg = window.Telegram.WebApp
+const tg = window.Telegram?.WebApp
 
 const requestHandler = async () => {
     console.log('tg:', tg);
