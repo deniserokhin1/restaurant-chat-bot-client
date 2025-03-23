@@ -4,7 +4,9 @@
             class="controls__input"
             v-model="inputValue"
             type="text"
+            ref="input"
             :disabled="isLoading"
+            placeholder="Введите блюдо или вопрос"
         />
         <button
             class="controls__btn"
@@ -18,7 +20,7 @@
 
 <script setup lang="ts">
 import { useChatFeedStore } from '@/entities'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 defineProps({
     buttonText: {
@@ -31,12 +33,16 @@ const emit = defineEmits<{
     (e: 'add-user-query'): void
 }>()
 
+const input = ref<HTMLInputElement | null>(null);
 const inputValue = ref('')
 const isLoading = ref(false)
 
 const chatFeedStore = useChatFeedStore()
+//@ts-ignore
+const tg = window.Telegram.WebApp
 
 const requestHandler = async () => {
+    console.log('tg:', tg);
     if (!inputValue.value || isLoading.value) return
     const query = inputValue.value
     inputValue.value = ''
@@ -47,8 +53,13 @@ const requestHandler = async () => {
     emit('add-user-query')
     await chatFeedStore
         .getLlmAnswer(query)
-        .catch((e) => console.log('Ошибка при получении ответа от LLM:', e))
-        .finally(() => (isLoading.value = false))
+        .catch((e) => {
+            console.log('Ошибка при получении ответа от LLM:', e)
+            chatFeedStore.errorHandler(e)
+        })
+        .finally(() => {
+            isLoading.value = false
+        })
     const endTime = Date.now()
     const responseTime = endTime - startTime
     console.log('Время ответа от сервера:', responseTime, 'мс')
@@ -57,20 +68,19 @@ const requestHandler = async () => {
 
 <style>
 .controls {
-    width: 100%;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 10px;
     padding: 16px;
-    flex-direction: column;
-    box-sizing: border-box;
-    position: absolute;
-    bottom: 0;
 }
 
 .controls__input {
+    width: -webkit-fill-available;
     padding: 15px;
     font-size: 16px;
-    border: 2px solid #007bff;
-    border-radius: 5px;
+    border: 2px solid #ffdd00;
+    border-radius: 25px;
     outline: none;
     transition:
         border-color 0.3s,
@@ -87,8 +97,7 @@ const requestHandler = async () => {
 }
 
 .controls__btn {
-    margin-top: 10px;
-    padding: 15px 25px;
+    padding: 15px;
     font-size: 16px;
     color: white;
     background-color: #007bff;

@@ -36,6 +36,12 @@ export const useChatFeedStore = defineStore<string, ChatFeedStoreState, {}, Chat
                     { type: MessageSide.USER, text },
                     { type: ChatFeedItemsEnum.LOADING }
                 ]
+            },
+            errorHandler(e) {
+                this.feed = [
+                    ...this.feed.slice(0, this.feed.length - 1),
+                    { type: MessageSide.SYSTEM, text: e.message }
+                ]
             }
         }
     },

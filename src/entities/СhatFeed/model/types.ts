@@ -22,6 +22,7 @@ export type ChatFeedStoreState = {
 export type ChatFeedStoreActions = {
     getLlmAnswer(query: string): Promise<void>
     addUserQuery(query: string): void
+    errorHandler(e: Error): void
 }
 
 export enum MessageSide {

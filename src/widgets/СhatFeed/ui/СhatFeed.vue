@@ -1,5 +1,6 @@
 <template>
-    <div class="main">
+    <div class="main" @click="closeKeyboard">
+        <LLMRequest @addUserQuery="scrollToBottom" />
         <div class="wrapper" ref="scrollContainer">
             <div class="chat-feed" v-for="item in feed">
                 <TextBlock
@@ -9,9 +10,11 @@
                         item.text.charAt(0).toUpperCase() + item.text.slice(1)
                     "
                 />
+
                 <Loader v-if="item.type === ChatFeedItemsEnum.LOADING" />
+
                 <div
-                    v-if="item.type === DishType.ACTIVE && !!item.dishes.length"
+                    v-if="item.type === DishType.ACTIVE && item.dishes.length > 0"
                     class="goods-container"
                 >
                     <ProductCard
@@ -22,15 +25,16 @@
                         :url="url"
                     />
                 </div>
+
                 <CardBg
                     v-if="item.type === MessageSide.SYSTEM"
                     :text-align="TextAlign.START"
+                    class="text-block--system"
                 >
                     <div v-html="item.text" />
                 </CardBg>
             </div>
         </div>
-        <LLMRequest @addUserQuery="scrollToBottom" />
     </div>
 </template>
 
@@ -46,6 +50,13 @@ import {
 } from '@/entities'
 import { LLMRequest } from '@/features'
 import { onBeforeUnmount, ref } from 'vue'
+
+function closeKeyboard() {
+    //@ts-ignore
+    const tg = window.Telegram.WebApp
+    console.log(tg);
+    tg?.closeKeyboard()
+}
 
 const scrollContainer = ref<HTMLDivElement>()
 const timerId = ref()
@@ -92,12 +103,11 @@ onBeforeUnmount(() => clearTimeout(timerId.value))
 .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     row-gap: 16px;
     padding: 16px;
-    min-height: 15vh;
-    max-height: 80vh;
-    display: flex;
+    position: absolute;
+    inset: 0;
+    top: 80px;
     overflow-y: scroll;
     scroll-behavior: smooth;
 }
@@ -108,18 +118,7 @@ onBeforeUnmount(() => clearTimeout(timerId.value))
     gap: 16px;
 }
 
-.text-block {
+.text-block--system {
     width: fit-content;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-    padding: 16px;
-}
-
-.text-block--user {
-    width: fit-content;
-    text-align: end;
 }
 </style>
