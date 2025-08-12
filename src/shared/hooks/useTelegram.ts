@@ -1,5 +1,5 @@
 import type { WebApp, WebAppUser } from "telegram-web-app"
-import { onMounted, ref, computed } from "vue"
+import { onMounted, ref, shallowRef } from "vue"
 
 interface TelegramState {
     webApp: WebApp | null
@@ -121,15 +121,17 @@ class TelegramManager {
 
 export const useTelegram = () => {
     const telegramManager = TelegramManager.getInstance()
-    const state = ref<TelegramState>(telegramManager.getState())
-
-    const webApp = computed(() => state.value.webApp)
-    const isTelegram = computed(() => state.value.isTelegram)
-    const user = computed(() => state.value.user)
+    
+    const webApp = shallowRef<WebApp | null>(null)
+    const isTelegram = ref(false)
+    const user = ref<WebAppUser | null>(null)
 
     const initializeTelegram = async (): Promise<void> => {
         await telegramManager.initialize()
-        state.value = telegramManager.getState()
+        const state = telegramManager.getState()
+        webApp.value = state.webApp
+        isTelegram.value = state.isTelegram
+        user.value = state.user
     }
 
     onMounted(() => {
@@ -143,7 +145,9 @@ export const useTelegram = () => {
         initialize: initializeTelegram,
         reset: () => {
             telegramManager.reset()
-            state.value = telegramManager.getState()
+            webApp.value = null
+            isTelegram.value = false
+            user.value = null
         }
     }
 }
