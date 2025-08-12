@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { Сhat } from '@/pages'
+import { Сhat, Cart } from '@/pages'
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -8,6 +8,11 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: Сhat
+        },
+        {
+            path: '/cart',
+            name: 'cart',
+            component: Cart
         },
     ]
 })

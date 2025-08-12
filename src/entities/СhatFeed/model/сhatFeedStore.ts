@@ -24,8 +24,8 @@ export const useChatFeedStore = defineStore<string, ChatFeedStoreState, {}, Chat
 
                 const dataOrdered: ChatFeedItems[] = []
                 llmAnswer.answer.forEach((_, idx) => {
-                    dataOrdered.push(dishes[idx])
                     dataOrdered.push(llmText[idx])
+                    dataOrdered.push(dishes[idx])
                 })
 
                 this.feed = [...this.feed.slice(0, this.feed.length - 1), ...dataOrdered ]

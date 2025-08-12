@@ -1,0 +1,149 @@
+import type { WebApp, WebAppUser } from "telegram-web-app"
+import { onMounted, ref, computed } from "vue"
+
+interface TelegramState {
+    webApp: WebApp | null
+    isTelegram: boolean
+    user: WebAppUser | null
+}
+
+class TelegramManager {
+    private static instance: TelegramManager | null = null
+    private state: TelegramState
+    private isInitializing = false
+    private initializationPromise: Promise<void> | null = null
+
+    private constructor() {
+        this.state = {
+            webApp: null,
+            isTelegram: false,
+            user: null
+        }
+    }
+
+    public static getInstance(): TelegramManager {
+        if (!TelegramManager.instance) {
+            TelegramManager.instance = new TelegramManager()
+        }
+        return TelegramManager.instance
+    }
+
+    public getState(): TelegramState {
+        return this.state
+    }
+
+    public async initialize(): Promise<void> {
+        // Если уже инициализируемся, ждем завершения
+        if (this.isInitializing && this.initializationPromise) {
+            await this.initializationPromise
+            return
+        }
+
+        // Если уже инициализированы, ничего не делаем
+        if (this.state.isTelegram && this.state.webApp) {
+            return
+        }
+
+        // Начинаем инициализацию
+        this.isInitializing = true
+        this.initializationPromise = new Promise(async (resolve) => {
+            try {
+                await this.performInitialization()
+            } catch (error) {
+                console.error('Failed to initialize Telegram WebApp:', error)
+                this.setState({
+                    webApp: null,
+                    isTelegram: false,
+                    user: null
+                })
+            } finally {
+                this.isInitializing = false
+                this.initializationPromise = null
+                resolve()
+            }
+        })
+
+        await this.initializationPromise
+    }
+
+    private async performInitialization(): Promise<void> {
+        // Проверяем доступность Telegram WebApp API
+        if (!window.Telegram?.WebApp) {
+            console.warn('Telegram WebApp API not available')
+            this.setState({
+                webApp: null,
+                isTelegram: false,
+                user: null
+            })
+            return
+        }
+
+        const tg = window.Telegram.WebApp
+        const userData = tg.initDataUnsafe?.user
+
+        // Проверяем валидность пользователя
+        if (!userData?.id) {
+            console.warn('Invalid Telegram user data')
+            this.setState({
+                webApp: null,
+                isTelegram: false,
+                user: null
+            })
+            return
+        }
+
+        // Инициализируем Telegram WebApp
+        tg.ready()
+        
+        this.setState({
+            webApp: tg,
+            isTelegram: true,
+            user: userData
+        })
+
+        console.log('Telegram WebApp initialized successfully', { userId: userData.id })
+    }
+
+    private setState(newState: TelegramState): void {
+        this.state = { ...newState }
+    }
+
+    public reset(): void {
+        this.setState({
+            webApp: null,
+            isTelegram: false,
+            user: null
+        })
+        this.isInitializing = false
+        this.initializationPromise = null
+    }
+}
+
+export const useTelegram = () => {
+    const telegramManager = TelegramManager.getInstance()
+    const state = ref<TelegramState>(telegramManager.getState())
+
+    const webApp = computed(() => state.value.webApp)
+    const isTelegram = computed(() => state.value.isTelegram)
+    const user = computed(() => state.value.user)
+
+    const initializeTelegram = async (): Promise<void> => {
+        await telegramManager.initialize()
+        state.value = telegramManager.getState()
+    }
+
+    onMounted(() => {
+        initializeTelegram()
+    })
+
+    return {
+        webApp,
+        isTelegram,
+        user,
+        initialize: initializeTelegram,
+        reset: () => {
+            telegramManager.reset()
+            state.value = telegramManager.getState()
+        }
+    }
+}

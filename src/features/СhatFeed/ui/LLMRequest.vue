@@ -15,12 +15,21 @@
         >
             {{ buttonText }}
         </button>
+        <button
+            class="controls__btn"
+            @click="router.push('/cart')"
+        >
+            Корзина
+        </button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useChatFeedStore } from '@/entities'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 defineProps({
     buttonText: {
@@ -76,10 +85,11 @@ const requestHandler = async () => {
 }
 
 .controls__input {
-    width: -webkit-fill-available;
+    width: 100%;
+    min-width: 0;
     padding: 15px;
     font-size: 16px;
-    border: 2px solid #ffdd00;
+    border: 2px solid var(--tg-theme-bottom-bar-bg-color);
     border-radius: 25px;
     outline: none;
     transition:
@@ -87,7 +97,7 @@ const requestHandler = async () => {
         box-shadow 0.3s;
 
     &:focus {
-        border-color: #0056b3;
+        border-color: var(--tg-theme-accent-text-color);
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
     &:disabled {
@@ -99,8 +109,8 @@ const requestHandler = async () => {
 .controls__btn {
     padding: 15px;
     font-size: 16px;
-    color: white;
-    background-color: #007bff;
+    color: var(--tg-theme-button-text-color);
+    background-color: var(--tg-theme-button-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;

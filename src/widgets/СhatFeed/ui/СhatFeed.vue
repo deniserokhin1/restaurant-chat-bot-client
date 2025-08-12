@@ -79,7 +79,7 @@ onBeforeUnmount(() => clearTimeout(timerId.value))
 <style scoped>
 .main {
     width: 100vw;
-    height: 100vh;
+    height: var(--tg-viewport-height);
 }
 
 .chat-feed {
