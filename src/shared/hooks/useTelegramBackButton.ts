@@ -12,13 +12,21 @@ export const useTelegramBackButton = () => {
     }
 
     watch(() => route.fullPath, (path) => {
-        if (!webApp.value) return null
+        try {
+            if (!webApp.value) return null
 
-        if (path !== '/') {
-            webApp.value.BackButton.show()
-            webApp.value.BackButton.onClick(handleBackButton)
-        } else {
-            webApp.value.BackButton.hide()
+            console.log('webApp', webApp.value)
+            console.log('path', path)
+    
+            if (path !== '/') {
+                console.log('show')
+                webApp.value.BackButton.show()
+                webApp.value.BackButton.onClick(handleBackButton)
+            } else {
+                webApp.value.BackButton.hide()
+            }   
+        } catch (error) {
+            console.error('Error initializing Telegram WebApp:', error)
         }
     })
 
