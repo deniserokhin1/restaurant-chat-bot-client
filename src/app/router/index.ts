@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { Сhat, Cart } from '@/pages'
+import { RoutePaths } from '@/shared/constants'
 
 const router = createRouter({
     history: createWebHistory('/'),
     routes: [
         {
-            path: '/',
+            path: RoutePaths.HOME,
             name: 'home',
             component: Сhat
         },
         {
-            path: '/cart',
+            path: RoutePaths.CART,
             name: 'cart',
             component: Cart
         },
