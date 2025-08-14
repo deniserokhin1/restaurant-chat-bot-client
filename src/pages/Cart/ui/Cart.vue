@@ -1,14 +1,16 @@
 <template>
-    <h1 class="cart-title">Cart</h1>
+    <h1 class="cart-text">Cart</h1>
+    <p class="cart-text">{{ user?.first_name }}</p>
 </template>
 
 <script setup lang="ts">
-import { useTelegramBackButton } from '@/shared/hooks'
+import { useTelegramBackButton, useTelegram } from '@/shared/hooks'
 useTelegramBackButton()
+const { user } = useTelegram()
 </script>
 
 <style scoped>
-.cart-title {
+.cart-text {
     color: var(--tg-theme-text-color);
 }
 </style>

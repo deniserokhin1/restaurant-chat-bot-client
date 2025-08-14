@@ -68,12 +68,18 @@ class TelegramManager {
 
     private async performInitialization(): Promise<void> {
         // Проверяем доступность Telegram WebApp API
-        if (!window.Telegram?.WebApp) {
+        if (!Object.keys(window.Telegram?.WebApp?.initDataUnsafe).length) {
             console.warn('Telegram WebApp API not available')
             this.setState({
                 webApp: null,
                 isTelegram: false,
-                user: null
+                user: {
+                    id: 0,
+                    first_name: 'Test',
+                    last_name: 'Test',
+                    username: 'Test',
+                    language_code: 'Test',
+                }
             })
             return
         }
@@ -94,6 +100,8 @@ class TelegramManager {
 
         // Инициализируем Telegram WebApp
         tg.ready()
+        tg.expand()
+        tg.disableVerticalSwipes()
         
         this.setState({
             webApp: tg,
