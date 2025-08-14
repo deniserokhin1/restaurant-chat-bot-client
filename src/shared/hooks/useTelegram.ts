@@ -100,7 +100,7 @@ class TelegramManager {
 
         // Инициализируем Telegram WebApp
         tg.ready()
-        tg.expand()
+        tg.requestFullscreen()
         tg.disableVerticalSwipes()
         
         this.setState({

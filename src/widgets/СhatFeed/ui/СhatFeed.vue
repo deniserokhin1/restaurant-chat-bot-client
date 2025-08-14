@@ -50,12 +50,13 @@ import {
 } from '@/entities'
 import { LLMRequest } from '@/features'
 import { onBeforeUnmount, ref } from 'vue'
+import { useTelegram } from '@/shared/hooks'
+
+const { webApp } = useTelegram()
 
 function closeKeyboard() {
     //@ts-ignore
-    const tg = window.Telegram.WebApp
-    console.log(tg);
-    tg?.closeKeyboard()
+    webApp.value?.closeKeyboard()
 }
 
 const scrollContainer = ref<HTMLDivElement>()
