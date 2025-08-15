@@ -99,9 +99,13 @@ class TelegramManager {
         }
 
         // Инициализируем Telegram WebApp
-        tg.ready()
-        tg.requestFullscreen()
-        tg.disableVerticalSwipes()
+        try {
+            tg.ready()
+            tg?.requestFullscreen()
+            tg.disableVerticalSwipes()
+        } catch (error) {
+            console.warn('Failed to initialize Telegram WebApp:', error)
+        }
         
         this.setState({
             webApp: tg,
@@ -109,7 +113,11 @@ class TelegramManager {
             user: userData
         })
 
-        console.log('Telegram WebApp initialized successfully', { userId: userData.id })
+        console.log('Telegram WebApp initialized successfully', { 
+            userId: userData.id,
+            safeAreaInset: tg.contentSafeAreaInset,
+            viewportHeight: tg.viewportHeight
+        })
     }
 
     private setState(newState: TelegramState): void {
@@ -140,6 +148,11 @@ export const useTelegram = () => {
         webApp.value = state.webApp
         isTelegram.value = state.isTelegram
         user.value = state.user
+        
+        // Логируем информацию о безопасных отступах
+        if (state.webApp?.contentSafeAreaInset) {
+            console.log('Telegram WebApp safe area insets:', state.webApp.contentSafeAreaInset)
+        }
     }
 
     onMounted(() => {

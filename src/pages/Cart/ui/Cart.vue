@@ -1,6 +1,8 @@
 <template>
-    <h1 class="cart-text">Cart</h1>
-    <p class="cart-text">{{ user?.first_name }}</p>
+    <div class="cart-container">
+        <h1 class="cart-text">Cart</h1>
+        <p class="cart-text">{{ user?.first_name }}</p>
+    </div>
 </template>
 
 <script setup lang="ts">

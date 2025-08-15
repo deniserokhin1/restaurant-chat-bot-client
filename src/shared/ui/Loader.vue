@@ -14,12 +14,12 @@
 <style>
 .spinner_I8Q1 {
     animation: spinner_qhi1 0.75s linear infinite;
-    fill: #007bff;
+    fill: var(--tg-theme-button-color);
 }
 
 .spinner_vrS7 {
     animation-delay: -0.375s;
-    fill: #007bff;
+    fill: var(--tg-theme-button-color);
 }
 
 @keyframes spinner_qhi1 {

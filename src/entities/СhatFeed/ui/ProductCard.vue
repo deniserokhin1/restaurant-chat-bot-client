@@ -64,13 +64,13 @@ onBeforeUnmount(() => {
     width: 100%;
     height: auto;
     min-height: clamp(100px, 47vw, 22vh);
-    border-radius: 8px;
+    border-radius: 16px;
 }
 
 .product-image--stub {
     width: 100%;
     min-height: clamp(100px, 47vw, 22vh);
-    border-radius: 8px;
+    border-radius: 16px;
 
     position: relative;
     overflow: hidden;

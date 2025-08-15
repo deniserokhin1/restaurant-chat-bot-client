@@ -81,7 +81,6 @@ const requestHandler = async () => {
     align-items: center;
     justify-content: space-between;
     column-gap: 10px;
-    padding: 16px;
 }
 
 .controls__input {
@@ -98,11 +97,9 @@ const requestHandler = async () => {
 
     &:focus {
         border-color: var(--tg-theme-accent-text-color);
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
     &:disabled {
-        border-color: #007bffa7;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        opacity: 0.7;
     }
 }
 
@@ -118,24 +115,12 @@ const requestHandler = async () => {
         background-color 0.3s,
         transform 0.3s;
 
-    &:hover {
-        background-color: #0056b3;
-
-        transform: translateY(-2px);
-    }
-
-    &:hover {
-        background-color: #0056b3;
-
-        transform: translateY(-2px);
-    }
-
     &:active {
         transform: translateY(1px);
     }
 
     &:disabled {
-        background-color: #007bffa7;
+        opacity: 0.7;
         cursor: not-allowed;
         transform: none;
     }
