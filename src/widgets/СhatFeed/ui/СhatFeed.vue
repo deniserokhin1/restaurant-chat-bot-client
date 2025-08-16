@@ -1,13 +1,15 @@
 <template>
     <div class="wrapper" ref="scrollContainer">
         <div class="chat-feed" v-for="item in feed">
-            <TextBlock
-                v-if="item.type === MessageSide.USER"
-                :side="'user'"
-                :text="
-                    item.text.charAt(0).toUpperCase() + item.text.slice(1)
-                "
-            />
+            <Transition>
+                <TextBlock
+                    v-if="item.type === MessageSide.USER"
+                    :side="'user'"
+                    :text="
+                        item.text.charAt(0).toUpperCase() + item.text.slice(1)
+                    "
+                />
+            </Transition>
 
             <Loader v-if="item.type === ChatFeedItemsEnum.LOADING" />
 
@@ -24,13 +26,15 @@
                 />
             </div>
 
-            <CardBg
-                v-if="item.type === MessageSide.SYSTEM"
-                :text-align="TextAlign.START"
-                class="text-block--system"
-            >
-                <div v-html="item.text" />
-            </CardBg>
+            <Transition>
+                <CardBg
+                    v-if="item.type === MessageSide.SYSTEM"
+                    :text-align="TextAlign.START"
+                    class="text-block--system"
+                >
+                    <div v-html="item.text" />
+                </CardBg>
+            </Transition>
         </div>
     </div>
     <LLMRequest @addUserQuery="scrollToBottom" />
@@ -105,5 +109,15 @@ onBeforeUnmount(() => {
 
 .text-block--system {
     width: fit-content;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

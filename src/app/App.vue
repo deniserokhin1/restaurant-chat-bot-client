@@ -55,7 +55,7 @@ body {
 .main {
     width: 100vw;
     height: var(--tg-viewport-height);
-    padding-top: calc(var(--tg-safe-area-inset-top) + 40px);
+    padding-top: calc(var(--tg-safe-area-inset-top) + 48px);
     padding-bottom: calc(var(--tg-safe-area-inset-bottom) + 8px);
     padding-left: calc(var(--tg-safe-area-inset-left) + 8px);
     padding-right: calc(var(--tg-safe-area-inset-right) + 8px);
