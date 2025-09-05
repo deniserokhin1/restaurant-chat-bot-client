@@ -4,14 +4,14 @@
         @click="closeKeyboard"
     >
         <RouterView /> 
-        <DashboardDemo />
+        <Navigation />
     </div>
 </template>
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import { Navigation } from '@/widgets'
 import { useTelegram, useTelegramBackButton } from '@/shared/hooks'
-import { DashboardDemo } from '@/pages'
 
 const { webApp } = useTelegram()
 useTelegramBackButton()

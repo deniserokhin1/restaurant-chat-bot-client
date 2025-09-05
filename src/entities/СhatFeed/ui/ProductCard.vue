@@ -1,20 +1,20 @@
 <template>
     <CardBg>
         <div class="product-image--stub" v-if="isLoading" />
-        <img
-            v-if="!isLoading && !isError"
+        <div>
+            <img
+            v-if="!isLoading && !isError && !url.includes('3582_m')"
             :src="`http://naprivale-orel.ru/${url}`"
             class="product-image"
         />
-        <img
-            v-if="isError"
-            src="../assets/net-foto.png"
-            class="product-image"
-        />
-        <div class="product-card__description">
+            <img
+                v-if="isError || url.includes('3582_m')"
+                src="../assets/net-foto.png"
+                class="product-image"
+            />
             <h2 class="product-name">{{ title }}</h2>
-            <p class="product-price">{{ price }}</p>
         </div>
+        <p class="product-price">{{ price }}</p>
     </CardBg>
 </template>
 
@@ -64,13 +64,13 @@ onBeforeUnmount(() => {
     width: 100%;
     height: auto;
     min-height: clamp(100px, 47vw, 22vh);
-    border-radius: 16px;
+    border-radius: 8px;
 }
 
 .product-image--stub {
     width: 100%;
     min-height: clamp(100px, 47vw, 22vh);
-    border-radius: 16px;
+    border-radius: 8px;
 
     position: relative;
     overflow: hidden;

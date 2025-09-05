@@ -35,10 +35,14 @@ defineProps({
 
 <style scoped>
 .card-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     background-color: var(--tg-theme-button-color);
     color: var(--tg-theme-button-text-color);
     border-radius: 18px;
-    padding: 8px 16px;
+    padding: 16px;
     text-align: center;
     transition: transform 0.3s;
 }

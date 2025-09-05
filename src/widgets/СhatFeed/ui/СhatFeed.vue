@@ -37,9 +37,7 @@
             </Transition>
         </div>
     </div>
-    <div>
-        <LLMRequest @addUserQuery="scrollToBottom" />
-    </div>
+    <LLMRequest @addUserQuery="scrollToBottom" />
 </template>
 
 <script setup lang="ts">
@@ -54,7 +52,6 @@ import {
 } from '@/entities'
 import { LLMRequest } from '@/features'
 import { onBeforeUnmount, ref } from 'vue'
-import DashboardDemo from '@/pages/Dashboard/ui/DashboardDemo.vue'
 
 const scrollContainer = ref<HTMLDivElement>()
 const timerId = ref()
