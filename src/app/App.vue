@@ -63,7 +63,7 @@ body {
     padding-right: calc(var(--tg-safe-area-inset-right) + 8px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: end;
     box-sizing: border-box;
     transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

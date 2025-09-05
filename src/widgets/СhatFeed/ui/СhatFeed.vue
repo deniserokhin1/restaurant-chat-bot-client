@@ -97,6 +97,7 @@ onBeforeUnmount(() => {
 
 .wrapper {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     row-gap: 16px;
     overflow-y: scroll;
