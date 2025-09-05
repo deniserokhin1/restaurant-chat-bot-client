@@ -39,7 +39,6 @@
     </div>
     <div>
         <LLMRequest @addUserQuery="scrollToBottom" />
-        <DashboardDemo />
     </div>
 </template>
 

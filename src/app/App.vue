@@ -4,12 +4,14 @@
         @click="closeKeyboard"
     >
         <RouterView /> 
+        <DashboardDemo />
     </div>
 </template>
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { useTelegram, useTelegramBackButton } from '@/shared/hooks'
+import { DashboardDemo } from '@/pages'
 
 const { webApp } = useTelegram()
 useTelegramBackButton()
